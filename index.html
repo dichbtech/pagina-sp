@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supervisores - System DIC</title>
+    <title>Supervisores - Operacional DIC</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,385 +12,377 @@
 
     <style>
         /* ==========================================
-           VARIÁVEIS DUAL-MODE (ÚNICAS PARA SUPERVISORES)
+           1. SISTEMA DE CORES OPERACIONAL (SUPERVISORES)
            ========================================== */
         :root {
-            /* DARK MODE (Padrão Sombrio/Premium) */
-            --bg-body: #0a0a0c;
-            --bg-surface: #131417;
-            --bg-surface-elevated: #1c1d22;
-            --border-color: rgba(255, 255, 255, 0.06);
-            --border-hover: rgba(255, 255, 255, 0.15);
-            
+            /* DARK MODE (Sombrio / Premium) */
+            --bg-body: #080809;
+            --bg-surface: #111216;
+            --bg-elevated: #1a1b21;
+            --border: rgba(255, 255, 255, 0.05);
+            --border-strong: rgba(255, 255, 255, 0.12);
             --text-main: #f8fafc;
             --text-muted: #94a3b8;
-            
-            --brand-yellow: #eab308; /* Amarelo Sólido */
-            --brand-yellow-glow: rgba(234, 179, 8, 0.15);
-            --brand-red: #dc2626; /* Vermelho DIC */
-            
-            --glass-bg: rgba(19, 20, 23, 0.7);
-            --shadow-dock: 0 10px 40px rgba(0, 0, 0, 0.8);
+            --accent: #facc15; /* Amarelo Supervisores */
+            --accent-glow: rgba(250, 204, 21, 0.15);
+            --dock-bg: rgba(17, 18, 22, 0.8);
         }
 
         [data-theme="light"] {
-            /* LIGHT MODE (Branco, Amarelo e Detalhes Vermelhos) */
-            --bg-body: #f8fafc;
-            --bg-surface: #ffffff;
-            --bg-surface-elevated: #f1f5f9;
-            --border-color: #e2e8f0;
-            --border-hover: #cbd5e1;
-            
-            --text-main: #0f172a;
-            --text-muted: #64748b;
-            
-            --brand-yellow: #ca8a04;
-            --brand-yellow-glow: rgba(202, 138, 4, 0.15);
-            --brand-red: #b91c1c;
-            
-            --glass-bg: rgba(255, 255, 255, 0.8);
-            --shadow-dock: 0 10px 30px rgba(15, 23, 42, 0.1);
+            /* LIGHT MODE (Branco e Amarelo - Detalhes Cinza Escuro) */
+            --bg-body: #ffffff;
+            --bg-surface: #fafafa;
+            --bg-elevated: #f4f4f5;
+            --border: #e4e4e7;
+            --border-strong: #d4d4d8;
+            --text-main: #18181b;
+            --text-muted: #71717a;
+            --accent: #ca8a04; /* Amarelo mais denso para leitura */
+            --accent-glow: rgba(202, 138, 4, 0.1);
+            --dock-bg: rgba(255, 255, 255, 0.9);
         }
 
         /* ==========================================
-           RESET E BASE
+           2. RESET & GLOBAL
            ========================================== */
-        * { margin: 0; padding: 0; box-sizing: border-box; transition: background-color 0.3s, border-color 0.3s, color 0.3s; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-body); color: var(--text-main); padding-bottom: 120px; overflow-x: hidden; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg-body); 
+            color: var(--text-main); 
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+            padding-bottom: 110px; /* Espaço pro Dock */
+        }
+        
+        .container { max-width: 1300px; margin: 0 auto; padding: 0 30px; }
 
         /* ==========================================
-           TOP NAVIGATION (Minimalista)
+           3. TOP BAR
            ========================================== */
-        .top-nav {
-            position: sticky; top: 0; z-index: 900;
-            background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--border-color);
-            padding: 15px 40px; display: flex; justify-content: space-between; align-items: center;
+        .top-bar {
+            height: 75px; background: var(--bg-surface); border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; position: sticky; top: 0; z-index: 1000;
         }
 
         .brand { display: flex; align-items: center; gap: 15px; }
         .brand img { width: 45px; image-rendering: pixelated; }
-        .brand-text h1 { font-family: 'Rajdhani', sans-serif; font-size: 22px; font-weight: 700; text-transform: uppercase; line-height: 1; letter-spacing: 1px; }
-        .brand-text h2 { font-size: 11px; font-weight: 600; color: var(--brand-yellow); text-transform: uppercase; letter-spacing: 2px; }
+        .brand-text h1 { font-family: 'Rajdhani', sans-serif; font-size: 20px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--text-main); line-height: 1; }
+        .brand-text h2 { font-size: 11px; font-weight: 600; color: var(--accent); text-transform: uppercase; letter-spacing: 2px; }
 
-        .nav-links { display: flex; gap: 30px; }
-        .nav-item { font-size: 13px; font-weight: 600; color: var(--text-muted); cursor: pointer; text-transform: uppercase; letter-spacing: 1px; padding-bottom: 4px; position: relative; }
-        .nav-item:hover { color: var(--text-main); }
-        .nav-item.active { color: var(--brand-yellow); }
-        .nav-item.active::after { content: ''; position: absolute; bottom: -17px; left: 0; width: 100%; height: 3px; background: var(--brand-yellow); border-radius: 3px 3px 0 0; }
-        [data-theme="light"] .nav-item.active { color: var(--brand-red); }
-        [data-theme="light"] .nav-item.active::after { background: var(--brand-red); }
-
-        .user-controls { display: flex; align-items: center; gap: 20px; }
-        .theme-btn { background: none; border: none; font-size: 18px; color: var(--text-main); cursor: pointer; }
-        .profile-pill { display: flex; align-items: center; gap: 10px; background: var(--bg-surface-elevated); padding: 5px 15px 5px 5px; border-radius: 30px; border: 1px solid var(--border-color); }
-        .avatar-circle { width: 35px; height: 35px; border-radius: 50%; background: var(--bg-surface); overflow: hidden; position: relative; }
-        .avatar-circle img { position: absolute; top: -10px; left: -5px; width: 45px; image-rendering: pixelated; }
-        .profile-info { text-align: right; line-height: 1.2; }
-        .profile-info strong { display: block; font-size: 12px; }
-        .profile-info span { font-size: 10px; color: var(--text-muted); font-weight: 600; text-transform: uppercase; }
-
-        /* ==========================================
-           VIEWS DA APLICAÇÃO (SPA)
-           ========================================== */
-        .spa-container { max-width: 1400px; margin: 40px auto; padding: 0 20px; }
-        .spa-view { display: none; animation: slideUp 0.4s ease forwards; }
-        .spa-view.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* ESTILOS DA TELA INÍCIO */
-        .welcome-banner { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; position: relative; margin-bottom: 40px; box-shadow: var(--shadow-dock); }
-        .welcome-banner img { width: 100%; height: 250px; object-fit: cover; opacity: 0.6; }
-        [data-theme="light"] .welcome-banner img { opacity: 0.9; }
-        .welcome-text { position: absolute; bottom: 30px; left: 30px; }
-        .welcome-text h2 { font-family: 'Rajdhani', sans-serif; font-size: 32px; font-weight: 700; color: #fff; text-transform: uppercase; text-shadow: 0 2px 10px rgba(0,0,0,0.8); }
-
-        .feed-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 30px; }
-        @media (max-width: 900px) { .feed-grid { grid-template-columns: 1fr; } }
+        .top-actions { display: flex; align-items: center; gap: 25px; }
+        .theme-btn { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-main); width: 38px; height: 38px; border-radius: 50%; cursor: pointer; }
         
-        .card { background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 16px; padding: 25px; box-shadow: var(--shadow-dock); }
-        .card-header { font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700; text-transform: uppercase; color: var(--brand-yellow); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-        [data-theme="light"] .card-header { color: var(--brand-red); }
-
-        .post-item { border-bottom: 1px solid var(--border-color); padding-bottom: 20px; margin-bottom: 20px; }
-        .post-item:last-child { border: none; padding: 0; margin: 0; }
-        .post-tag { display: inline-block; font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 4px 10px; border-radius: 6px; background: var(--brand-yellow-glow); color: var(--brand-yellow); margin-bottom: 10px; }
-        [data-theme="light"] .post-tag { background: rgba(185, 28, 28, 0.1); color: var(--brand-red); }
-        .post-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
-        .post-desc { font-size: 14px; color: var(--text-muted); line-height: 1.6; }
+        .user-card { display: flex; align-items: center; gap: 12px; background: var(--bg-elevated); padding: 5px 15px 5px 5px; border-radius: 40px; border: 1px solid var(--border); }
+        .avatar-mini { width: 32px; height: 32px; border-radius: 50%; background: var(--bg-body); overflow: hidden; position: relative; }
+        .avatar-mini img { position: absolute; top: -10px; left: -5px; width: 42px; image-rendering: pixelated; }
+        .user-details strong { display: block; font-size: 12px; }
+        .user-details span { font-size: 10px; color: var(--text-muted); text-transform: uppercase; }
 
         /* ==========================================
-           FLOATING ACTION DOCK (A REVOLUÇÃO DA UX)
+           4. SPA VIEWS
            ========================================== */
-        .dock-wrapper {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            display: flex; gap: 15px; padding: 12px 25px;
-            background: var(--glass-bg); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--border-color); border-radius: 100px;
-            box-shadow: var(--shadow-dock); z-index: 999;
+        .spa-view { display: none; animation: fadeIn 0.4s ease forwards; margin-top: 40px; }
+        .spa-view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* COMPONENTES DE INTERFACE */
+        .card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: 16px; padding: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
+        .section-title { font-family: 'Rajdhani', sans-serif; font-size: 24px; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; gap: 15px; margin-bottom: 25px; }
+        .section-title i { color: var(--accent); }
+
+        .btn-action { background: var(--accent); color: #000; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; text-transform: uppercase; font-size: 12px; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; }
+        .btn-action:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+        /* TABELAS MODERNAS */
+        .table-container { width: 100%; overflow-x: auto; margin-top: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; padding: 15px; font-size: 11px; text-transform: uppercase; color: var(--text-muted); border-bottom: 2px solid var(--border); }
+        td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 13px; }
+        tr:hover td { background: var(--bg-elevated); }
+
+        /* ==========================================
+           5. DOCK FLUTUANTE (ESTILO MAC/SUPERVISORES)
+           ========================================== */
+        .dock {
+            position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%);
+            background: var(--dock-bg); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            padding: 10px 20px; border-radius: 24px; border: 1px solid var(--border-strong);
+            display: flex; gap: 12px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); z-index: 2000;
         }
 
         .dock-item {
+            width: 48px; height: 48px; border-radius: 14px; background: var(--bg-elevated);
             display: flex; align-items: center; justify-content: center;
-            width: 45px; height: 45px; border-radius: 50%;
-            background: var(--bg-surface-elevated); color: var(--text-main);
-            border: 1px solid var(--border-color); font-size: 16px;
-            cursor: pointer; position: relative; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-size: 18px; color: var(--text-muted); cursor: pointer;
+            position: relative; transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
-        .dock-item:hover {
-            background: var(--brand-yellow); color: #000; border-color: var(--brand-yellow);
-            transform: translateY(-8px) scale(1.1); box-shadow: 0 10px 20px var(--brand-yellow-glow);
-        }
-        [data-theme="light"] .dock-item:hover { background: var(--brand-red); color: #fff; border-color: var(--brand-red); box-shadow: 0 10px 20px rgba(185, 28, 28, 0.2); }
+        .dock-item:hover { transform: translateY(-10px) scale(1.15); color: var(--accent); background: var(--bg-surface); }
+        .dock-item.active { color: var(--accent); border-bottom: 3px solid var(--accent); border-radius: 14px 14px 4px 4px; }
 
-        /* Tooltip do Dock */
-        .dock-item::before {
-            content: attr(data-tooltip); position: absolute; top: -40px;
-            background: var(--bg-surface); color: var(--text-main); border: 1px solid var(--border-color);
-            padding: 5px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; white-space: nowrap;
-            opacity: 0; pointer-events: none; transform: translateY(10px); transition: all 0.2s;
-            box-shadow: var(--shadow-dock);
+        .dock-item::after {
+            content: attr(data-label); position: absolute; top: -45px; background: var(--bg-elevated);
+            color: var(--text-main); font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 8px;
+            white-space: nowrap; opacity: 0; pointer-events: none; transition: 0.2s;
         }
-        .dock-item:hover::before { opacity: 1; transform: translateY(0); }
+        .dock-item:hover::after { opacity: 1; transform: translateY(-5px); }
 
-        /* O Botão Especial do Centro de Comando (Liderança) */
-        .dock-leader { background: var(--brand-red) !important; color: #fff !important; border-color: var(--brand-red) !important; margin-left: 15px; }
-        .dock-leader:hover { filter: brightness(1.2); transform: translateY(-8px) scale(1.1); }
-        .dock-divider { width: 1px; height: 30px; background: var(--border-color); margin: auto 0; }
+        .dock-separator { width: 1px; height: 30px; background: var(--border-strong); margin: auto 5px; }
+
+        /* CENTRO DE COMANDO */
+        .dock-command { background: var(--text-main) !important; color: var(--bg-body) !important; }
 
         /* ==========================================
-           CENTRO DE COMANDO (OFF-CANVAS OVERLAY)
+           6. CENTRO DE COMANDO (OVERLAY)
            ========================================== */
-        .command-center-overlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
-            z-index: 2000; opacity: 0; pointer-events: none; transition: opacity 0.3s;
-            display: flex; justify-content: flex-end;
+        .command-center {
+            position: fixed; top: 0; right: -400px; width: 400px; height: 100%;
+            background: var(--bg-surface); border-left: 1px solid var(--border-strong);
+            padding: 40px; z-index: 3000; transition: right 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: -20px 0 50px rgba(0,0,0,0.2);
         }
-        .command-center-overlay.active { opacity: 1; pointer-events: all; }
+        .command-center.open { right: 0; }
 
-        .command-panel {
-            width: 450px; height: 100%; background: var(--bg-body); border-left: 1px solid var(--border-color);
-            padding: 40px; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-            display: flex; flex-direction: column; overflow-y: auto;
+        .cmd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
+        .cmd-tile {
+            background: var(--bg-elevated); border: 1px solid var(--border); border-radius: 12px;
+            padding: 20px; text-align: center; cursor: pointer; transition: 0.2s;
         }
-        .command-center-overlay.active .command-panel { transform: translateX(0); }
+        .cmd-tile:hover { border-color: var(--accent); transform: scale(1.03); }
+        .cmd-tile i { font-size: 24px; color: var(--accent); margin-bottom: 10px; display: block; }
+        .cmd-tile span { font-size: 11px; font-weight: 700; text-transform: uppercase; }
 
-        .cmd-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .cmd-header h2 { font-family: 'Rajdhani', sans-serif; font-size: 24px; font-weight: 700; color: var(--brand-red); text-transform: uppercase; }
-        .close-cmd { background: none; border: none; font-size: 24px; color: var(--text-muted); cursor: pointer; }
-        .close-cmd:hover { color: var(--brand-red); }
+        .overlay-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2500; display: none; }
+        .overlay-mask.open { display: block; }
 
-        .cmd-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .cmd-btn {
-            background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: 12px;
-            padding: 20px 15px; text-align: center; cursor: pointer; transition: all 0.2s;
-            display: flex; flex-direction: column; align-items: center; gap: 10px;
-        }
-        .cmd-btn i { font-size: 24px; color: var(--text-muted); transition: color 0.2s; }
-        .cmd-btn span { font-size: 12px; font-weight: 600; color: var(--text-main); }
-        .cmd-btn:hover { border-color: var(--brand-red); background: var(--bg-surface-elevated); transform: translateY(-3px); }
-        .cmd-btn:hover i { color: var(--brand-red); }
+        /* ==========================================
+           7. ESTILOS DE COMPONENTES ESPECÍFICOS
+           ========================================== */
+        .notif-badge { background: var(--accent); color: #000; padding: 2px 6px; border-radius: 4px; font-weight: 800; font-size: 10px; margin-left: 5px; }
+        .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 8px; }
+        .status-online { background: #22c55e; box-shadow: 0 0 10px rgba(34, 197, 94, 0.4); }
+
+        .banner-main { width: 100%; height: 300px; border-radius: 20px; overflow: hidden; margin-bottom: 30px; border: 1px solid var(--border); }
+        .banner-main img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .member-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .member-card { background: var(--bg-elevated); border-radius: 12px; padding: 20px; text-align: center; border: 1px solid var(--border); position: relative; }
+        .member-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--accent); border-radius: 12px 12px 0 0; }
+        .member-card img { height: 90px; image-rendering: pixelated; margin-bottom: 10px; }
+        .member-card h4 { font-size: 15px; font-weight: 800; }
+        .member-card p { font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-top: 4px; }
     </style>
 </head>
 <body data-theme="dark">
 
-    <nav class="top-nav">
+    <div class="overlay-mask" id="mask" onclick="toggleCommand()"></div>
+
+    <header class="top-bar">
         <div class="brand">
-            <img src="https://www.habbo.com.br/habbo-imaging/badge/b10134s12017s43014t12104s170129cb6c41f26a37e0c3192016b851550a7.gif" alt="Logo">
+            <img src="https://www.habbo.com.br/habbo-imaging/badge/b10134s12017s43014t12104s170129cb6c41f26a37e0c3192016b851550a7.gif">
             <div class="brand-text">
                 <h1>Supervisores</h1>
-                <h2>Polícia DIC</h2>
+                <h2>Operacional DIC</h2>
             </div>
         </div>
-        
-        <div class="nav-links">
-            <div class="nav-item active" onclick="switchNav('view-home', this)">Início</div>
-            <div class="nav-item" onclick="switchNav('view-membros', this)">Membros</div>
-            <div class="nav-item" onclick="switchNav('view-hubs', this)">Grupos e Hubs</div>
-        </div>
-
-        <div class="user-controls">
-            <button class="theme-btn" onclick="toggleTheme()"><i class="fa-solid fa-lightbulb" id="themeIcon"></i></button>
-            <div class="profile-pill">
-                <div class="profile-info">
+        <div class="top-actions">
+            <button class="theme-btn" onclick="toggleTheme()"><i class="fa-solid fa-circle-half-stroke"></i></button>
+            <div class="user-card">
+                <div class="avatar-mini"><img src="https://www.habbo.com.br/habbo-imaging/avatarimage?user=MegaMetall&action=std&direction=4&head_direction=4&gesture=sml&size=m"></div>
+                <div class="user-details">
                     <strong>MegaMetall</strong>
                     <span>Sub-Líder</span>
                 </div>
-                <div class="avatar-circle">
-                    <img src="https://www.habbo.com.br/habbo-imaging/avatarimage?user=MegaMetall&action=std&direction=4&head_direction=4&gesture=sml&size=m" alt="Avatar">
-                </div>
             </div>
         </div>
-    </nav>
+    </header>
 
-    <div class="spa-container">
+    <div class="container">
         
         <main id="view-home" class="spa-view active">
-            <div class="welcome-banner">
-                <div style="width: 100%; height: 250px; background: linear-gradient(135deg, rgba(161,0,0,0.8), rgba(20,20,20,1));"></div>
-                <div class="welcome-text">
-                    <h2>Central de Supervisão</h2>
-                </div>
+            <div class="banner-main">
+                <img src="https://i.imgur.com/886puf9.png">
             </div>
-
-            <div class="feed-grid">
-                <div class="card">
-                    <div class="card-header"><i class="fa-solid fa-newspaper"></i> Mural Operacional</div>
-                    
-                    <div class="post-item">
-                        <span class="post-tag">Nova Arquitetura</span>
-                        <h3 class="post-title">O Fim dos Menus Laterais Poluídos</h3>
-                        <p class="post-desc">A nova interface adota o conceito de Clean UI. As ferramentas operacionais essenciais foram movidas para o Dock Flutuante na parte inferior da tela. Lá você encontra a Calculadora de Licenças, o Regimento e a Consulta de Estrelas a um clique de distância, garantindo que o seu foco de leitura fique 100% no conteúdo da página principal.</p>
-                    </div>
-                    
-                    <div class="post-item">
-                        <span class="post-tag">Instrução</span>
-                        <h3 class="post-title">Como acessar as ferramentas de Liderança?</h3>
-                        <p class="post-desc">Se você possui nível Sub-Líder ou superior, notará um botão vermelho destacado no Dock inferior. Ao clicar nele, você abre o nosso "Centro de Comando", um painel lateral dinâmico onde residem as edições de Portarias, Canvas, Transparências e a Gestão de Membros.</p>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header"><i class="fa-solid fa-crown"></i> Patrocinadores</div>
-                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
-                        <div style="text-align: center;">
-                            <div style="width:50px; height:50px; background:var(--bg-surface-elevated); border-radius:8px; overflow:hidden; position:relative; margin:0 auto 5px auto; border:1px solid var(--border-color);">
-                                <img src="https://www.habbo.com.br/habbo-imaging/avatarimage?user=Pachieri&action=std&direction=2&head_direction=2&gesture=sml&size=m" style="position:absolute; top:-10px; left:2px;">
-                            </div>
-                            <span style="font-size:11px; font-weight:700;">Pachieri</span>
-                        </div>
-                    </div>
-                </div>
+            <div class="card">
+                <div class="section-title"><i class="fa-solid fa-bullhorn"></i> Mural Divisional</div>
+                <p style="color: var(--text-muted); line-height: 1.6;">Bem-vindo à nova interface unificada dos Supervisores. Este ambiente SPA foi projetado para máxima performance. Todas as ferramentas operacionais estão concentradas no Dock inferior para acesso instantâneo.</p>
             </div>
         </main>
 
         <main id="view-membros" class="spa-view">
-            <div class="card">
-                <div class="card-header" style="justify-content: space-between;">
-                    <span><i class="fa-solid fa-users"></i> Corpo de Supervisores</span>
+            <div class="section-title"><i class="fa-solid fa-users"></i> Bancada de Membros</div>
+            <div class="member-grid">
+                <div class="member-card">
+                    <img src="https://www.habbo.com.br/habbo-imaging/avatarimage?user=Pachieri&action=std&direction=2&head_direction=3&gesture=sml&size=l">
+                    <h4>Pachieri</h4>
+                    <p>Líder dos Supervisores</p>
                 </div>
-                <p style="color:var(--text-muted); font-size:14px; margin-bottom:30px;">A nova interface limpa expande a área útil, permitindo uma visualização mais ampla das fileiras de membros sem menus apertando o layout.</p>
-                
-                <h3 style="font-family:'Rajdhani'; color:var(--brand-yellow); border-bottom:1px solid var(--border-color); padding-bottom:10px; margin-bottom:20px;">Alta Liderança</h3>
-                <div style="display:flex; gap:15px; margin-bottom:40px;">
-                    <div style="background:var(--bg-surface-elevated); border:1px solid var(--border-color); border-top:3px solid var(--brand-red); border-radius:12px; padding:20px; width:200px; text-align:center;">
-                        <img src="https://www.habbo.com.br/habbo-imaging/avatarimage?user=Pachieri&action=std&direction=2&head_direction=3&gesture=sml&size=l" style="height:90px; margin-bottom:10px;">
-                        <h4 style="font-size:16px;">Pachieri</h4>
-                        <span style="font-size:11px; font-weight:600; color:var(--text-muted); text-transform:uppercase;">Líder</span>
-                    </div>
+                <div class="member-card">
+                    <img src="https://www.habbo.com.br/habbo-imaging/avatarimage?user=Geladuuu&action=std&direction=2&head_direction=3&gesture=sml&size=l">
+                    <h4>Geladuuu</h4>
+                    <p>Sub-Líder</p>
+                </div>
+                <div class="member-card">
+                    <img src="https://www.habbo.com.br/habbo-imaging/avatarimage?user=MegaMetall&action=std&direction=2&head_direction=3&gesture=sml&size=l">
+                    <h4>MegaMetall</h4>
+                    <p>Sub-Líder</p>
                 </div>
             </div>
         </main>
 
-        <main id="view-hubs" class="spa-view">
+        <main id="view-notificacoes" class="spa-view">
+            <div class="page-header" style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 30px;">
+                <div class="section-title"><i class="fa-solid fa-bell"></i> Gestão de Notificações</div>
+                <button class="btn-action" onclick="alert('Mock: Abrir formulário de aplicação')"><i class="fa-solid fa-plus"></i> Aplicar Notificação</button>
+            </div>
+            <div class="card" style="padding: 0;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Policial Envolvido</th>
+                            <th>Nº Notificações</th>
+                            <th style="text-align:right;">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>,Preen,</strong></td>
+                            <td><span class="notif-badge">0/1</span></td>
+                            <td style="text-align:right;"><button class="btn-action" style="padding: 5px 12px; font-size: 10px;">Visualizar</button></td>
+                        </tr>
+                        <tr>
+                            <td><strong>Lyftz</strong></td>
+                            <td><span class="notif-badge">0/1</span></td>
+                            <td style="text-align:right;"><button class="btn-action" style="padding: 5px 12px; font-size: 10px;">Visualizar</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+
+        <main id="view-justificativas" class="spa-view">
+            <div class="section-title"><i class="fa-solid fa-file-signature"></i> Painel de Justificativas</div>
             <div class="card">
-                <div class="card-header"><i class="fa-solid fa-layer-group"></i> Nossos Hubs</div>
-                <p style="color:var(--text-muted); font-size:14px;">Mockup da tela que exibe os sub-grupos, como Decisões Monocráticas, Aprendizes, etc.</p>
+                <p style="color: var(--text-muted); font-size: 13px; font-style: italic;">Nenhuma justificativa pendente no momento.</p>
+            </div>
+        </main>
+
+        <main id="view-documentos" class="spa-view">
+            <div class="section-title"><i class="fa-solid fa-book"></i> Acervo de Documentos</div>
+            <div class="table-container">
+                <div class="card" style="padding:0;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Documento</th>
+                                <th>Acesso</th>
+                                <th>Status</th>
+                                <th style="text-align:right;">Ação</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>Regimento Interno ®</strong></td>
+                                <td>Geral</td>
+                                <td><span style="color:#22c55e;">Ativado</span></td>
+                                <td style="text-align:right;"><button class="btn-action" style="padding: 5px 12px; font-size: 10px;">Ler</button></td>
+                            </tr>
+                            <tr>
+                                <td><strong>Cartilha de Formação</strong></td>
+                                <td>Auxiliares</td>
+                                <td><span style="color:#22c55e;">Ativado</span></td>
+                                <td style="text-align:right;"><button class="btn-action" style="padding: 5px 12px; font-size: 10px;">Ler</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </main>
 
     </div>
 
-    <div class="dock-wrapper">
-        <div class="dock-item" data-tooltip="Consulta de Metas" onclick="alert('Abre o modal ou view do Pódio/Metas')">
-            <i class="fa-solid fa-bullseye"></i>
+    <nav class="dock">
+        <div class="dock-item active" data-label="Início" id="dock-home" onclick="switchTab('view-home', this)">
+            <i class="fa-solid fa-house"></i>
         </div>
-        <div class="dock-item" data-tooltip="Cálculo de Licenças" onclick="alert('Abre a calculadora de dias descobertos')">
-            <i class="fa-solid fa-calculator"></i>
+        <div class="dock-item" data-label="Membros" id="dock-membros" onclick="switchTab('view-membros', this)">
+            <i class="fa-solid fa-users"></i>
         </div>
-        <div class="dock-item" data-tooltip="Regimento Interno" onclick="alert('Abre o leitor do Regimento')">
-            <i class="fa-solid fa-book"></i>
+        <div class="dock-item" data-label="Notificações" id="dock-notif" onclick="switchTab('view-notificacoes', this)">
+            <i class="fa-solid fa-bell"></i>
         </div>
-        <div class="dock-item" data-tooltip="Cartilha de Formação" onclick="alert('Abre a Cartilha')">
-            <i class="fa-solid fa-graduation-cap"></i>
+        <div class="dock-item" data-label="Justificativas" id="dock-just" onclick="switchTab('view-justificativas', this)">
+            <i class="fa-solid fa-clipboard-check"></i>
+        </div>
+        <div class="dock-item" data-label="Documentos" id="dock-docs" onclick="switchTab('view-documentos', this)">
+            <i class="fa-solid fa-book-open"></i>
         </div>
         
-        <div class="dock-divider"></div>
+        <div class="dock-separator"></div>
         
-        <div class="dock-item dock-leader" data-tooltip="Centro de Comando (Liderança)" onclick="toggleCommandCenter()">
+        <div class="dock-item dock-command" data-label="Liderança" onclick="toggleCommand()">
             <i class="fa-solid fa-shield-halved"></i>
         </div>
-    </div>
+    </nav>
 
-    <div class="command-center-overlay" id="cmdOverlay" onclick="closeCommandCenter(event)">
-        <div class="command-panel" onclick="event.stopPropagation()">
-            <div class="cmd-header">
-                <h2>Comando DIC</h2>
-                <button class="close-cmd" onclick="toggleCommandCenter()"><i class="fa-solid fa-xmark"></i></button>
+    <aside class="command-center" id="commandPanel">
+        <h2 style="font-family:'Rajdhani'; text-transform:uppercase; color:var(--accent);">Gestão Divisional</h2>
+        <p style="font-size:12px; color:var(--text-muted); margin-top:5px;">Acesso restrito: Liderança e Sub-Liderança.</p>
+        
+        <div class="cmd-grid">
+            <div class="cmd-tile" onclick="alert('Módulo de Membros')">
+                <i class="fa-solid fa-user-plus"></i>
+                <span>Membros</span>
             </div>
-            
-            <p style="font-size:13px; color:var(--text-muted); margin-bottom:25px; line-height:1.5;">O Arsenal da Liderança oculto para não poluir a tela principal. Todas as ferramentas administrativas estão aqui.</p>
-
-            <div class="cmd-grid">
-                <div class="cmd-btn" onclick="alert('Abre edição de Membros')">
-                    <i class="fa-solid fa-user-gear"></i>
-                    <span>Controle de Membros</span>
-                </div>
-                <div class="cmd-btn" onclick="alert('Abre o Painel de Portarias')">
-                    <i class="fa-solid fa-file-contract"></i>
-                    <span>Portarias</span>
-                </div>
-                <div class="cmd-btn" onclick="alert('Abre Criação de Publicações')">
-                    <i class="fa-solid fa-pen-nib"></i>
-                    <span>Publicações (Feed)</span>
-                </div>
-                <div class="cmd-btn" onclick="alert('Abre Editor do Canvas')">
-                    <i class="fa-solid fa-palette"></i>
-                    <span>Canvas</span>
-                </div>
-                <div class="cmd-btn" onclick="alert('Abre Decretos')">
-                    <i class="fa-solid fa-stamp"></i>
-                    <span>Decretos</span>
-                </div>
-                <div class="cmd-btn" onclick="alert('Abre Transparências')">
-                    <i class="fa-solid fa-magnifying-glass-chart"></i>
-                    <span>Transparência</span>
-                </div>
-                <div class="cmd-btn" onclick="alert('Abre Atividades em Massa')">
-                    <i class="fa-solid fa-layer-group"></i>
-                    <span>Ativ. em Massa</span>
-                </div>
-                <div class="cmd-btn" onclick="alert('Abre Menu Configuration')">
-                    <i class="fa-solid fa-bars-progress"></i>
-                    <span>Editor de Menus</span>
-                </div>
+            <div class="cmd-tile" onclick="alert('Módulo de Publicação')">
+                <i class="fa-solid fa-newspaper"></i>
+                <span>Publicar</span>
+            </div>
+            <div class="cmd-tile" onclick="alert('Módulo de Portaria')">
+                <i class="fa-solid fa-file-contract"></i>
+                <span>Portarias</span>
+            </div>
+            <div class="cmd-tile" onclick="alert('Módulo de Canvas')">
+                <i class="fa-solid fa-palette"></i>
+                <span>Canvas</span>
+            </div>
+            <div class="cmd-tile" onclick="alert('Módulo Transparência')">
+                <i class="fa-solid fa-chart-line"></i>
+                <span>Transparência</span>
+            </div>
+            <div class="cmd-tile" onclick="alert('Módulo Metas')">
+                <i class="fa-solid fa-gear"></i>
+                <span>Metas Hub</span>
             </div>
         </div>
-    </div>
+
+        <button class="btn-action" style="margin-top:40px; width:100%; justify-content:center; background:var(--bg-elevated); color:var(--text-main); border:1px solid var(--border);" onclick="toggleCommand()">Fechar Painel</button>
+    </aside>
 
     <script>
-        // Troca de Telas (Top Nav)
-        function switchNav(viewId, element) {
+        // Troca de Abas SPA
+        function switchTab(viewId, element) {
             document.querySelectorAll('.spa-view').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            document.querySelectorAll('.dock-item').forEach(i => i.classList.remove('active'));
             
             document.getElementById(viewId).classList.add('active');
             element.classList.add('active');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Modo Dual-Theme
+        // Toggle Tema
         function toggleTheme() {
             const body = document.body;
-            const icon = document.getElementById('themeIcon');
-            if (body.getAttribute('data-theme') === 'dark') {
-                body.setAttribute('data-theme', 'light');
-                icon.className = 'fa-solid fa-moon';
-            } else {
-                body.setAttribute('data-theme', 'dark');
-                icon.className = 'fa-solid fa-lightbulb';
-            }
+            const isLight = body.getAttribute('data-theme') === 'light';
+            body.setAttribute('data-theme', isLight ? 'dark' : 'light');
         }
 
-        // Abre/Fecha o Centro de Comando
-        const cmdOverlay = document.getElementById('cmdOverlay');
-        function toggleCommandCenter() {
-            cmdOverlay.classList.toggle('active');
-        }
-        function closeCommandCenter(e) {
-            if (e.target === cmdOverlay) cmdOverlay.classList.remove('active');
+        // Centro de Comando
+        function toggleCommand() {
+            document.getElementById('commandPanel').classList.toggle('open');
+            document.getElementById('mask').classList.toggle('open');
         }
     </script>
 </body>
