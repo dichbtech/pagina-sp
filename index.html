@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supervisores - System DIC</title>
+    <title>Supervisores - Operacional DIC</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,7 +12,7 @@
 
     <style>
         /* ==========================================
-           1. SISTEMA DE CORES OPERACIONAL
+           1. SISTEMA DE CORES OPERACIONAL (SEM VERMELHO)
            ========================================== */
         :root {
             /* DARK MODE (Sombrio / Premium) */
@@ -42,7 +42,7 @@
             --text-main: #0f172a; 
             --text-muted: #64748b;
             --text-inverse: #ffffff;
-            --bg-inverse: #ca8a04; /* Amarelo sempre nos botões modo claro */
+            --bg-inverse: #ca8a04; 
             --accent: #ca8a04; 
             --accent-glow: rgba(202, 138, 4, 0.1);
             --dock-bg: rgba(255, 255, 255, 0.9);
@@ -71,7 +71,7 @@
 
         .top-actions { display: flex; align-items: center; gap: 25px; }
         .role-selector { background: var(--bg-elevated); border: 1px solid var(--border-strong); color: var(--text-main); padding: 8px 15px; border-radius: 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; outline: none; cursor: pointer; width: auto; }
-        .theme-btn { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-main); width: 38px; height: 38px; border-radius: 50%; cursor: pointer; }
+        .theme-btn { background: var(--bg-elevated); border: 1px solid var(--border); color: var(--text-main); width: 38px; height: 38px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         
         .user-card { display: flex; align-items: center; gap: 12px; background: var(--bg-elevated); padding: 5px 15px 5px 5px; border-radius: 40px; border: 1px solid var(--border); }
         .avatar-mini { width: 32px; height: 32px; border-radius: 50%; background: var(--bg-body); overflow: hidden; position: relative; border: 1px solid var(--border-strong); }
@@ -101,17 +101,16 @@
         td { padding: 15px; border-bottom: 1px solid var(--border); font-size: 13px; }
         tr:hover td { background: var(--bg-elevated); }
 
-        /* BANNER */
-        .banner-main { width: 100%; border-radius: 20px; overflow: hidden; margin-bottom: 30px; background: transparent; text-align: center; }
-        .banner-main img { max-width: 100%; height: auto; object-fit: contain; border-radius: 12px; }
+        /* BANNER (SEM SCROLL) */
+        .banner-main { width: 100%; height: 200px; border-radius: 20px; overflow: hidden; margin-bottom: 20px; background: transparent; text-align: center; }
+        .banner-main img { max-width: 100%; height: 100%; object-fit: contain; border-radius: 12px; }
 
         /* AVATAR ANIMAÇÃO */
         .avatar-scene { display: flex; gap: 20px; align-items: stretch; margin-bottom: 20px; }
         .notice-board { flex: 1; }
         .avatar-container { position: relative; width: 180px; height: 160px; overflow: visible; flex-shrink: 0; }
-        .habbo-avatar { position: absolute; bottom: -10px; left: -100px; transition: left 2.5s linear; image-rendering: pixelated; z-index: 2; width: 100px; }
-        .thought-bubble { position: absolute; top: 0; left: 10px; background: var(--bubble-bg); color: var(--bubble-text); border-radius: 12px; padding: 12px; font-size: 12px; font-weight: 600; width: 220px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); opacity: 0; transform: translateY(10px); transition: all 0.5s ease; z-index: 10; line-height: 1.4; border: 1px solid var(--border); }
-        .thought-bubble::after { content: ''; position: absolute; bottom: -8px; left: 40px; border-width: 8px 8px 0; border-style: solid; border-color: var(--bubble-bg) transparent transparent transparent; }
+        .habbo-avatar { position: absolute; bottom: -10px; transition: left 2.5s linear; image-rendering: pixelated; z-index: 2; width: 100px; }
+        .thought-bubble { position: absolute; top: -65px; left: -20px; background: var(--bubble-bg); color: var(--bubble-text); border-radius: 12px; padding: 12px; font-size: 12px; font-weight: 600; width: 220px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); opacity: 0; transform: translateY(10px); transition: all 0.5s ease; z-index: 10; line-height: 1.4; border: 1px solid var(--border); }
         .thought-bubble.visible { opacity: 1; transform: translateY(0); }
 
         /* DOCUMENTOS GRID */
@@ -138,7 +137,7 @@
         .member-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 15px; }
         .member-card { background: var(--bg-elevated); border-radius: 12px; padding: 20px; text-align: center; border: 1px solid var(--border); position: relative; }
         .member-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px; background: var(--accent); border-radius: 12px 12px 0 0; }
-        .member-card img { height: 80px; image-rendering: pixelated; margin-bottom: 10px; }
+        .member-card img { height: 130px; image-rendering: pixelated; margin-bottom: 10px; }
         .member-card h4 { font-size: 14px; font-weight: 800; }
         .member-card p { font-size: 10px; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-top: 4px; }
 
@@ -172,12 +171,13 @@
         .cmd-tile:hover { border-color: var(--accent); background: var(--bg-elevated); transform: translateY(-3px); }
         .cmd-tile:hover i { color: var(--accent); }
 
-        /* Mockup Podio Metas */
-        .podio-mock { display: flex; justify-content: center; align-items: flex-end; gap: 10px; height: 250px; margin-top: 20px; }
-        .podio-col { width: 100px; background: var(--bg-elevated); border: 1px solid var(--border); border-bottom: 0; display: flex; flex-direction: column; justify-content: flex-start; align-items: center; padding-top: 10px; font-weight: 800; font-size: 12px; border-radius: 8px 8px 0 0; }
+        .overlay-mask { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 2500; display: none; }
+        .overlay-mask.open { display: block; }
     </style>
 </head>
 <body data-theme="dark">
+
+    <div class="overlay-mask" id="mask" onclick="toggleCommand()"></div>
 
     <header class="top-bar">
         <div class="brand">
@@ -207,6 +207,7 @@
 
     <div class="container">
         
+        <!-- SPA: 1. INÍCIO -->
         <main id="view-home" class="spa-view active">
             <div class="banner-main">
                 <img src="https://i.imgur.com/886puf9.png" alt="Banner Oficial">
@@ -221,21 +222,24 @@
                 </div>
                 <div class="avatar-container">
                     <div id="leader-bubble" class="thought-bubble">
-                        </div>
+                        <!-- Texto Injetado via JS -->
+                    </div>
                     <img id="leader-avatar" class="habbo-avatar" src="">
                 </div>
             </div>
         </main>
 
+        <!-- SPA: 2. MEMBROS -->
         <main id="view-membros" class="spa-view">
             <div class="page-header">
-                <div class="section-title"><i class="fa-solid fa-users"></i> Membros Oficiais</div>
+                <div class="section-title"><i class="fa-solid fa-users"></i> Membros</div>
             </div>
-            
             <div id="grid-membros-render">
-                </div>
+                <!-- Renderizado via JS -->
+            </div>
         </main>
 
+        <!-- SPA: 3. NOTIFICAÇÕES -->
         <main id="view-notificacoes" class="spa-view">
             <div class="page-header">
                 <div class="section-title"><i class="fa-solid fa-bell"></i> Notificações Disciplinares</div>
@@ -254,6 +258,7 @@
             </div>
         </main>
 
+        <!-- SPA: 3.1. APLICAR NOTIFICAÇÃO -->
         <main id="view-notif-aplicar" class="spa-view">
             <div class="page-header">
                 <div class="section-title"><i class="fa-solid fa-plus"></i> Aplicar Notificação</div>
@@ -272,6 +277,7 @@
             </div>
         </main>
 
+        <!-- SPA: 4. JUSTIFICATIVAS -->
         <main id="view-justificativas" class="spa-view">
             <div class="page-header">
                 <div class="section-title"><i class="fa-solid fa-clipboard-check"></i> Justificativas</div>
@@ -283,6 +289,7 @@
             </div>
         </main>
 
+        <!-- SPA: 4.1. ENVIAR JUSTIFICATIVA -->
         <main id="view-justif-enviar" class="spa-view">
             <div class="page-header">
                 <div class="section-title"><i class="fa-solid fa-plus"></i> Enviar Justificativa</div>
@@ -297,6 +304,7 @@
             </div>
         </main>
 
+        <!-- SPA: 5. DOCUMENTOS -->
         <main id="view-documentos" class="spa-view">
             <div class="section-header">
                 <div class="section-title"><i class="fa-solid fa-file-lines"></i> Acervo de Documentos</div>
@@ -304,11 +312,11 @@
             <div class="doc-grid">
                 <div class="doc-card" onclick="alert('Lendo Documento: Regimento Interno')">
                     <div class="doc-preview"><i class="fa-regular fa-file-lines"></i></div>
-                    <h4>[DIC/TJP] Regimento Interno ®</h4>
+                    <h4>[Sp] Regimento Interno</h4>
                 </div>
-                <div class="doc-card" onclick="alert('Lendo Documento: Rito de Sessão')">
+                <div class="doc-card" onclick="alert('Lendo Documento: Sistema de Patrocinadores')">
                     <div class="doc-preview"><i class="fa-regular fa-file-lines"></i></div>
-                    <h4>[DIC/TJP] Rito de Sessão ®</h4>
+                    <h4>Sistema de Patrocinadores</h4>
                 </div>
                 <div class="doc-card" onclick="alert('Lendo Documento: Cartilha')">
                     <div class="doc-preview"><i class="fa-regular fa-file-lines"></i></div>
@@ -317,24 +325,22 @@
             </div>
         </main>
 
+        <!-- SPA: 6. FERRAMENTAS / CENTRAL -->
         <main id="view-central" class="spa-view">
             <div class="section-header">
                 <div class="section-title"><i class="fa-solid fa-shield"></i> Ferramentas da Divisão</div>
             </div>
             <div class="tools-grid" id="tools-render">
-                </div>
+                <!-- Injetado dinamicamente via JS com base no cargo -->
+            </div>
         </main>
 
+        <!-- VIEWS INTERNAS DAS FERRAMENTAS -->
         <main id="view-tool-metas" class="spa-view">
             <div class="page-header"><div class="section-title"><i class="fa-solid fa-bullseye"></i> Consulta de Metas</div><button class="btn-action btn-secondary" onclick="switchTab('view-central')"><i class="fa-solid fa-reply"></i> Voltar</button></div>
             <div class="card">
                 <div style="display:flex; justify-content:center; gap:10px; margin-bottom:20px;">
                     <div class="form-group"><label>Semana Referência</label><input type="date" value="2026-06-14"></div>
-                </div>
-                <div class="podio-mock">
-                    <div class="podio-col" style="height: 150px; background: rgba(255,255,255,0.02);">2º LUGAR<br><span>Syby</span></div>
-                    <div class="podio-col" style="height: 220px; background: rgba(250, 204, 21, 0.1); border-color:var(--accent); color:var(--accent);">1º LUGAR<br><span>Pachieri</span></div>
-                    <div class="podio-col" style="height: 120px; background: rgba(255,255,255,0.02);">3º LUGAR<br><span>Geladuuu</span></div>
                 </div>
             </div>
         </main>
@@ -355,6 +361,7 @@
         <main id="view-tool-grupos" class="spa-view"><div class="page-header"><div class="section-title"><i class="fa-solid fa-users-rectangle"></i> Controle de Grupos</div><button class="btn-action btn-secondary" onclick="switchTab('view-central')"><i class="fa-solid fa-reply"></i> Voltar</button></div><div class="card"><p>Controle de relatórios de grupos carregaria aqui.</p></div></main>
         <main id="view-tool-estrelas" class="spa-view"><div class="page-header"><div class="section-title"><i class="fa-solid fa-star"></i> Estrelas Promocionais</div><button class="btn-action btn-secondary" onclick="switchTab('view-central')"><i class="fa-solid fa-reply"></i> Voltar</button></div><div class="card"><p>Tabela de estrelas promocionais carregaria aqui.</p></div></main>
 
+        <!-- VIEWS ADMIN (CENTRO DE COMANDO) -->
         <main id="view-admin-membros" class="spa-view"><div class="page-header"><div class="section-title"><i class="fa-solid fa-user-gear"></i> Gestão de Membros</div><button class="btn-action btn-secondary" onclick="switchTab('view-home')"><i class="fa-solid fa-house"></i> Home</button></div><div class="card"><form onsubmit="event.preventDefault();"><div class="form-group"><label>Nickname</label><input type="text"></div><div class="form-group"><label>Função</label><select><option>Líder</option><option>Sub-Líder</option><option>Supervisor</option><option>Auxiliar</option></select></div><button class="btn-action"><i class="fa-solid fa-save"></i> Salvar Membro</button></form></div></main>
         <main id="view-admin-publicar" class="spa-view"><div class="page-header"><div class="section-title"><i class="fa-solid fa-newspaper"></i> Publicar Feed</div><button class="btn-action btn-secondary" onclick="switchTab('view-home')"><i class="fa-solid fa-house"></i> Home</button></div><div class="card"><form onsubmit="event.preventDefault();"><div class="form-group"><label>Título</label><input type="text"></div><div class="form-group"><label>Conteúdo</label><textarea rows="5"></textarea></div><button class="btn-action"><i class="fa-solid fa-paper-plane"></i> Publicar</button></form></div></main>
         <main id="view-admin-portarias" class="spa-view"><div class="page-header"><div class="section-title"><i class="fa-solid fa-file-contract"></i> Editor de Portarias</div><button class="btn-action btn-secondary" onclick="switchTab('view-home')"><i class="fa-solid fa-house"></i> Home</button></div><div class="card"><form onsubmit="event.preventDefault();"><div class="form-group"><label>Título</label><input type="text" value="PORTARIA Nº 166"></div><div class="form-group"><label>Corpo</label><textarea rows="10"></textarea></div><button class="btn-action"><i class="fa-solid fa-save"></i> Salvar</button></form></div></main>
@@ -364,9 +371,12 @@
         <main id="view-admin-massa" class="spa-view"><div class="page-header"><div class="section-title"><i class="fa-solid fa-layer-group"></i> Atividade em Massa</div><button class="btn-action btn-secondary" onclick="switchTab('view-home')"><i class="fa-solid fa-house"></i> Home</button></div><div class="card"><p>Ações em lote carregariam aqui.</p></div></main>
     </div>
 
+    <!-- DOCK FLUTUANTE GLOBAL -->
     <nav class="dock" id="dockNav">
-        </nav>
+        <!-- Renderizado dinamicamente via JS -->
+    </nav>
 
+    <!-- CENTRO DE COMANDO (OVERLAY LIDERANÇA) -->
     <div class="cmd-overlay" id="cmdPanel">
         <div class="cmd-panel" onclick="event.stopPropagation()">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
@@ -387,38 +397,51 @@
         </div>
     </div>
 
+    <!-- SCRIPT CENTRAL DO PROTÓTIPO -->
     <script>
         // Dados Mockados de Membros (Parseados da tabela enviada)
         const membrosData = [
-            { nick: "Pachieri", rank: "L.Sp", level: 1 },
-            { nick: "Geladuuu", rank: "S.Sp", level: 2 },
-            { nick: ":Matheus:Mell", rank: "S.Sp", level: 2 },
-            { nick: "gui_kunz", rank: "S.Sp", level: 2 },
-            { nick: "henriqu61192", rank: "Sp", level: 3 },
-            { nick: "_Mteky_", rank: "Sp", level: 3 },
-            { nick: "Syby", rank: "Sp", level: 3 },
-            { nick: "manovjunior", rank: "Sp", level: 3 },
-            { nick: "Hellenn_", rank: "Sp", level: 3 },
-            { nick: "JuliusKinG", rank: "Sp", level: 3 },
-            { nick: "ThorinOakshield", rank: "Sp", level: 3 },
-            { nick: "zzzb_", rank: "Sp", level: 3 },
-            { nick: "Toretto__", rank: "Sp", level: 3 },
-            { nick: "Hwberto", rank: "Sp", level: 3 },
-            { nick: "Psicotatto", rank: "Sp", level: 3 },
-            { nick: "luiza41418", rank: "A.Sp", level: 4 },
-            { nick: "-Winters-", rank: "A.Sp", level: 4 },
-            { nick: ".:Dr.West.:", rank: "A.Sp", level: 4 }
+            { nick: "Pachieri", rank: "L.Sp", tier: "Liderança" },
+            { nick: "Geladuuu", rank: "S.Sp", tier: "Liderança" },
+            { nick: ":Matheus:Mell", rank: "S.Sp", tier: "Liderança" },
+            { nick: "gui_kunz", rank: "S.Sp", tier: "Liderança" },
+            { nick: "luiza41418", rank: "A.Sp", tier: "Auxiliares" },
+            { nick: "-Winters-", rank: "A.Sp", tier: "Auxiliares" },
+            { nick: ".:Dr.West.:", rank: "A.Sp", tier: "Auxiliares" },
+            { nick: "henriqu61192", rank: "Sp", tier: "Supervisores" },
+            { nick: "_Mteky_", rank: "Sp", tier: "Supervisores" },
+            { nick: "Syby", rank: "Sp", tier: "Supervisores" },
+            { nick: "manovjunior", rank: "Sp", tier: "Supervisores" },
+            { nick: "Hellenn_", rank: "Sp", tier: "Supervisores" },
+            { nick: "JuliusKinG", rank: "Sp", tier: "Supervisores" },
+            { nick: "ThorinOakshield", rank: "Sp", tier: "Supervisores" },
+            { nick: "zzzb_", rank: "Sp", tier: "Supervisores" },
+            { nick: "Toretto__", rank: "Sp", tier: "Supervisores" },
+            { nick: "Hwberto", rank: "Sp", tier: "Supervisores" },
+            { nick: "Psicotatto", rank: "Sp", tier: "Supervisores" }
         ];
 
         function renderMembros() {
             const container = document.getElementById('grid-membros-render');
             container.innerHTML = '';
             
-            const titles = { 1: "Liderança", 2: "Sub-Liderança", 3: "Supervisores de Linha", 4: "Auxiliares de Supervisão" };
-            const desc = { "L.Sp": "Líder", "S.Sp": "Sub-Líder", "Sp": "Supervisor", "A.Sp": "Auxiliar" };
+            const groups = [
+                { title: "Liderança", filter: "Liderança" },
+                { title: "Auxiliares", filter: "Auxiliares" },
+                { title: "Supervisores", filter: "Supervisores" }
+            ];
+            
+            const desc = { "L.Sp": "Líder", "V.Sp": "Vice-Líder", "S.Sp": "Sub-Líder", "Sp": "Supervisor", "A.Sp": "Auxiliar" };
 
-            for (let i = 1; i <= 4; i++) {
-                let membrosTier = membrosData.filter(m => m.level === i);
+            groups.forEach(g => {
+                let membrosTier = membrosData.filter(m => m.tier === g.filter);
+                
+                // Ordenação na Liderança
+                if (g.filter === "Liderança") {
+                    const order = {"L.Sp": 1, "V.Sp": 2, "S.Sp": 3};
+                    membrosTier.sort((a,b) => order[a.rank] - order[b.rank]);
+                }
+
                 if (membrosTier.length > 0) {
                     let gridHtml = '';
                     membrosTier.forEach(m => {
@@ -431,33 +454,33 @@
                     });
                     container.innerHTML += `
                         <div class="hierarchy-group">
-                            <div class="hierarchy-title"><h3>${titles[i]}</h3></div>
+                            <div class="hierarchy-title"><h3>${g.title}</h3></div>
                             <div class="member-grid">${gridHtml}</div>
                         </div>`;
                 }
-            }
+            });
         }
 
         // Animação e Lógica do Avatar
-        const liderReal = { nick: 'Pachieri', gender: 'F' }; // Pode ser trocado via JS
+        const liderReal = { nick: 'Pachieri', gender: 'F' }; 
         
         function initAvatarScene() {
             const av = document.getElementById('leader-avatar');
             const bubble = document.getElementById('leader-bubble');
             
-            // Estado Inicial de Caminhada
-            av.src = `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${liderReal.nick}&action=wlk&direction=4&head_direction=4&gesture=std&size=l`;
-            av.style.left = '-100px';
+            // Estado Inicial: Fora da tela à direita, caminhando para a esquerda (direction 6)
+            av.src = `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${liderReal.nick}&action=wlk&direction=6&head_direction=6&gesture=std&size=l`;
+            av.style.left = '200px'; 
             bubble.classList.remove('visible');
 
             setTimeout(() => {
-                av.style.left = '20px'; // Caminha pro centro
+                av.style.left = '40px'; 
                 setTimeout(() => {
-                    // Para, acena e sorri
-                    av.src = `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${liderReal.nick}&action=wav&direction=4&head_direction=4&gesture=sml&size=l`;
+                    // Para, olha para a tela (direction 3), acena e sorri
+                    av.src = `https://www.habbo.com.br/habbo-imaging/avatarimage?user=${liderReal.nick}&action=wav&direction=3&head_direction=3&gesture=sml&size=l`;
                     
                     const pronome = liderReal.gender === 'F' ? 'a' : 'o';
-                    bubble.innerHTML = `Olá, seja bem-vindo aos Supervisores! Eu sou ${pronome} Líder de vocês, ${liderReal.nick}. #SAGE <div style="position:absolute; bottom:-8px; left:40px; border-width: 8px 8px 0; border-style:solid; border-color:var(--bubble-bg) transparent transparent transparent;"></div>`;
+                    bubble.innerHTML = `Olá, seja bem-vindo aos Supervisores! Eu sou ${pronome} Líder de vocês, ${liderReal.nick}. #SAGE <div style="position:absolute; bottom:-8px; left:50%; transform:translateX(-50%); border-width: 8px 8px 0; border-style:solid; border-color:var(--bubble-bg) transparent transparent transparent;"></div>`;
                     
                     bubble.classList.add('visible');
                 }, 2500); // Tempo da caminhada
@@ -573,7 +596,7 @@
         window.onload = () => {
             renderMembros();
             initAvatarScene();
-            changeRole('lideranca'); // Começa com visão máxima
+            changeRole('lideranca'); 
         };
     </script>
 </body>
